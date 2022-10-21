@@ -4,6 +4,8 @@
  */
 package defentthefort;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author JPablix
@@ -14,7 +16,8 @@ public class DefentTheFort {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Juego Iniciado");
+        RegistroJugador ventana = new RegistroJugador();
+        ventana.setVisible(true);
     }
     
 }
