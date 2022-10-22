@@ -41,8 +41,6 @@ public class FileManager {
     // read txt file, para ller el query
     public static String readFile (String path) throws FileNotFoundException, IOException
     {
-        
-        
         String everything;
 
         try(BufferedReader br = new BufferedReader(new FileReader(path))) 
@@ -115,14 +113,9 @@ public class FileManager {
             }
           }
           catch(ClassNotFoundException ex){
-           
           }
-          catch(IOException ex){
-            
+          catch(IOException ex){ 
           }
         return null;
-    }  
-    
-    
-    
+    }
 }// fin clase

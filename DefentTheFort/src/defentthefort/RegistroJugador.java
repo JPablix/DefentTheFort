@@ -24,7 +24,7 @@ public class RegistroJugador extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         registroUsuarios = new BDUsuarios();
-        //registroUsuarios.restaurar();
+        registroUsuarios.restaurar();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class RegistroJugador extends javax.swing.JFrame {
                     System.out.println("Se ha registrado: "+txfUsuario.getText());
                 }
             }
-            else System.out.println("Generando Partida");
+            else System.out.println("Cargando Partida");
         }
     }//GEN-LAST:event_txfUsuarioKeyTyped
 

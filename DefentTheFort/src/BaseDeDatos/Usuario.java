@@ -4,11 +4,13 @@
  */
 package BaseDeDatos;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JPablix
  */
-public class Usuario {
+public class Usuario implements Serializable{
     private String username;
     //Deben tener una partida
 
@@ -16,8 +18,6 @@ public class Usuario {
         this.username = username;
     }
 
-    
-    
     public String getUsername() {
         return username;
     }
