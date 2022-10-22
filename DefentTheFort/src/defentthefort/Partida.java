@@ -8,6 +8,7 @@ package defentthefort;
  *
  * @author JPablix
  */
-public class BDUsuarios {
-    
+public class Partida {
+    private int nivel;
+    private int espacios;
 }
