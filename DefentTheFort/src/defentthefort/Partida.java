@@ -4,11 +4,31 @@
  */
 package defentthefort;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JPablix
  */
-public class Partida {
+public class Partida implements Serializable{
     private int nivel;
-    private int espacios;
+    private int espaciosZombies;
+    private int espaciosSoldados;
+    private GUIPartida GUI;
+
+    public Partida() {
+        this.nivel = 1;
+        this.espaciosZombies = 5;
+        this.espaciosSoldados = 5;
+        this.GUI = new GUIPartida();
+    }
+
+    public GUIPartida getGUI() {
+        return GUI;
+    }
+    
+    
+    
+    
 }
+                                     

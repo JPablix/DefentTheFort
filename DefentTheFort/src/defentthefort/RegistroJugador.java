@@ -8,6 +8,7 @@ import BaseDeDatos.BDUsuarios;
 import BaseDeDatos.Usuario;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -16,9 +17,10 @@ import javax.swing.JTextField;
  *
  * @author JPablix
  */
-public class RegistroJugador extends javax.swing.JFrame {
+public class RegistroJugador extends javax.swing.JFrame implements Serializable{
 
     BDUsuarios registroUsuarios;
+    GUIPartida partida;
     
     public RegistroJugador() {
         initComponents();
@@ -69,7 +71,7 @@ public class RegistroJugador extends javax.swing.JFrame {
         pnlRegistroLayout.setVerticalGroup(
             pnlRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlRegistroLayout.createSequentialGroup()
-                .addContainerGap(156, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblIngreseUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txfUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -90,6 +92,7 @@ public class RegistroJugador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Función para cargar la partida de cada usuario
     private void txfUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txfUsuarioKeyTyped
         if (((int)evt.getKeyChar())==10){
             Usuario user = registroUsuarios.buscarUsuario(txfUsuario.getText());
@@ -101,7 +104,10 @@ public class RegistroJugador extends javax.swing.JFrame {
                     System.out.println("Se ha registrado: "+txfUsuario.getText());
                 }
             }
-            else System.out.println("Cargando Partida");
+            else {
+                System.out.println("Cargando Partida");
+                //user.getPartida().getGUI(). setVisible(true);
+            }
         }
     }//GEN-LAST:event_txfUsuarioKeyTyped
 

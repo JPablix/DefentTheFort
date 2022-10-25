@@ -32,7 +32,6 @@ public class BDUsuarios implements Serializable{
         System.out.println("Leyendo usuarios de "+FILE_PATH);
         BDUsuarios bd = (BDUsuarios)FileManager.readObject(FILE_PATH);
         this.usuarios = bd.usuarios;
-
     }
     
     public Usuario buscarUsuario(String user){  //Metodo que busca usuario

@@ -27,22 +27,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
-/**
- *
- * @author sap1
- */
 public class FileManager {
- 
-    
-    
-    
-    
     // read txt file, para ller el query
     public static String readFile (String path) throws FileNotFoundException, IOException
     {
         String everything;
-
         try(BufferedReader br = new BufferedReader(new FileReader(path))) 
         {
             StringBuilder sb = new StringBuilder();
@@ -70,6 +59,9 @@ public class FileManager {
         {
             bw.write(value);
             bw.close();
+        }
+        catch(IOException e){
+            System.out.println("No se pudo guardar" + e);
         }
         
     }

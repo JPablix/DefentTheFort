@@ -4,18 +4,19 @@
  */
 package defentthefort;
 
+import java.io.Serializable;
 import javax.swing.JLabel;
 
 /**
  *
  * @author JPablix
  */
-public class DefentTheFort {
+public class DefentTheFort implements Serializable{
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         RegistroJugador ventana = new RegistroJugador();
         ventana.setVisible(true);
     }
