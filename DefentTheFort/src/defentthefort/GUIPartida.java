@@ -5,20 +5,57 @@
 package defentthefort;
 
 
+import BaseDeDatos.BDUsuarios;
+import java.awt.Color;
 import java.io.Serializable;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 
-/**
- *
- * @author JPablix
- */
+
 public class GUIPartida extends javax.swing.JFrame implements Serializable{
-    
+    int SIZE = 30;
     Partida partida;
+    BDUsuarios usuarios;
     
-    public GUIPartida() {
+    public GUIPartida(String jugador, Partida partida) {
         initComponents();
+        this.partida = partida;
+        this.setTitle(jugador);
+        pnlAreaJuego.setSize(1000, 1000);
+        generarMatriz();
     }
+    
+    private void generarMatriz(){
+       //Generar botones
+       int posX = 0;
+       int posY = 0;
+       int contador = 1;
+       //------------------------------------------
+       for(int i = 0; i < 625; i++){
+           JButton btn = new JButton("");
+           if((contador%2) == 0){
+               btn.setBackground(new Color(0,153,0));
+               contador = 1;
+           }
+           else{
+              btn.setBackground(new Color(0,102,0));
+              contador += 1; 
+           }          
+           btn.setSize(SIZE, SIZE);
+           //-------------------------------
+           if(i%25 == 0 && i>0){
+               posX = 0;
+               posY += SIZE;
+           }
+           //------------------------------
+           btn.setLocation((SIZE*posX++), posY);
+
+           pnlAreaJuego.add(btn);
+       }
+    }
+
+
+
    
 
     
@@ -31,19 +68,27 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnl1 = new javax.swing.JPanel();
+        pnlAreaJuego = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 153, 153));
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
-        javax.swing.GroupLayout pnl1Layout = new javax.swing.GroupLayout(pnl1);
-        pnl1.setLayout(pnl1Layout);
-        pnl1Layout.setHorizontalGroup(
-            pnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 823, Short.MAX_VALUE)
+        pnlAreaJuego.setBackground(new java.awt.Color(153, 51, 0));
+
+        javax.swing.GroupLayout pnlAreaJuegoLayout = new javax.swing.GroupLayout(pnlAreaJuego);
+        pnlAreaJuego.setLayout(pnlAreaJuegoLayout);
+        pnlAreaJuegoLayout.setHorizontalGroup(
+            pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1003, Short.MAX_VALUE)
         );
-        pnl1Layout.setVerticalGroup(
-            pnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 527, Short.MAX_VALUE)
+        pnlAreaJuegoLayout.setVerticalGroup(
+            pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -51,24 +96,30 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(pnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(pnlAreaJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(pnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(pnlAreaJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+        if (((int)evt.getKeyChar())==27){
+            this.setVisible(false);
+        }
+    }//GEN-LAST:event_formKeyTyped
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel pnl1;
+    private javax.swing.JPanel pnlAreaJuego;
     // End of variables declaration//GEN-END:variables
 }

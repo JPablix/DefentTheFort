@@ -16,7 +16,6 @@ public class BDUsuarios implements Serializable{
     ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
     
     public BDUsuarios(){
-        
     }
     
     public void signIn(Usuario usuario){

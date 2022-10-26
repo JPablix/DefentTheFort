@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -27,6 +28,7 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
         this.setResizable(false);
         registroUsuarios = new BDUsuarios();
         registroUsuarios.restaurar();
+        
     }
 
     @Override
@@ -106,7 +108,8 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
             }
             else {
                 System.out.println("Cargando Partida");
-                //user.getPartida().getGUI(). setVisible(true);
+                partida = new GUIPartida(user.getUsername(), user.getPartida()); //Se manda el nombre del usuario y la partida
+                partida.setVisible(true);
             }
         }
     }//GEN-LAST:event_txfUsuarioKeyTyped

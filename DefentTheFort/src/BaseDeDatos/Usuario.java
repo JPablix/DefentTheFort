@@ -14,20 +14,20 @@ import java.io.Serializable;
  */
 public class Usuario implements Serializable{
     private String username;        //Nombre de usuario
-    //private Partida partida;     //Deben tener una partida
+    private Partida partida;     //Deben tener una partida
     
     public Usuario(String username) {
         this.username = username;
-        //this.partida = new Partida();
+        this.partida = new Partida();
     }
 
     public String getUsername() {
         return username;
     }
 
-//    public Partida getPartida() {
-//        return partida;
-//    }
+    public Partida getPartida() {
+        return partida;
+    }
     
     
     
