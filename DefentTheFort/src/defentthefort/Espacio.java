@@ -6,6 +6,7 @@ package defentthefort;
 
 import Arma.Arma;
 import Zombie.Zombie;
+import javax.swing.JButton;
 
 /**
  *
@@ -16,13 +17,18 @@ public class Espacio {
     boolean hasArma;
     Zombie zombie;
     Arma arma;
+    JButton boton;
 
     public Espacio() {
         this.hasZombie = false;
         this.hasArma = false;
-        this.zombie = null;
-        this.arma = null;
     }
+
+    public void setBoton(JButton boton) {
+        this.boton = boton;
+    }
+    
+    
 
     
     
@@ -57,6 +63,7 @@ public class Espacio {
     public void setArma(Arma arma) {
         this.arma = arma;
     }
+    
     
     
     

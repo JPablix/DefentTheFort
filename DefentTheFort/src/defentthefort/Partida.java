@@ -16,14 +16,26 @@ public class Partida implements Serializable{
     private int espaciosZombies;
     private int espaciosSoldados;
     Espacio espacios[] = new Espacio[625];
-    
 
     public Partida() {
+        init();
         this.nivel = 1;
         this.espaciosZombies = 5;
         this.espaciosSoldados = 5;
     }
+    
+    private void init(){
+        for (int i = 0; i < espacios.length; i++) {
+            espacios[i] = new Espacio();
+        }
+        System.out.println(""+espacios.length);
+    }
 
+    public Espacio[] getEspacios() {
+        return espacios;
+    }
+
+   
     
     
     

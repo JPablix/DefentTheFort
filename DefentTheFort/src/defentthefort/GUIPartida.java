@@ -22,8 +22,8 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         initComponents();
         this.partida = partida;
         this.setTitle("Defent The Fort: Zombie Attack \t"+jugador);
-        pnlAreaJuego.setSize(1000, 1000);
         generarMatriz();
+        
     }
     
     private void generarMatriz(){   //Generar botones
@@ -46,6 +46,7 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         //------------------------------
            btn.setLocation((SIZE*posX++), posY);
            pnlAreaJuego.add(btn);
+           partida.espacios[i].setBoton(btn);
        }
     }
 
