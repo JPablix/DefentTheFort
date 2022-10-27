@@ -8,19 +8,20 @@ package defentthefort;
 import BaseDeDatos.BDUsuarios;
 import java.awt.Color;
 import java.io.Serializable;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
 
 public class GUIPartida extends javax.swing.JFrame implements Serializable{
-    int SIZE = 30;
+    int SIZE = 40;
     Partida partida;
     BDUsuarios usuarios;
     
     public GUIPartida(String jugador, Partida partida) {
         initComponents();
         this.partida = partida;
-        this.setTitle(jugador);
+        this.setTitle("Defent The Fort: Zombie Attack \t"+jugador);
         pnlAreaJuego.setSize(1000, 1000);
         generarMatriz();
     }
@@ -55,9 +56,6 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     }
 
 
-
-   
-
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,43 +67,52 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     private void initComponents() {
 
         pnlAreaJuego = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
+        setPreferredSize(new java.awt.Dimension(1110, 750));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 formKeyTyped(evt);
             }
         });
 
-        pnlAreaJuego.setBackground(new java.awt.Color(153, 51, 0));
+        pnlAreaJuego.setBackground(new java.awt.Color(77, 49, 36));
+
+        jButton1.setBackground(new java.awt.Color(102, 255, 51));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlAreaJuegoLayout = new javax.swing.GroupLayout(pnlAreaJuego);
         pnlAreaJuego.setLayout(pnlAreaJuegoLayout);
         pnlAreaJuegoLayout.setHorizontalGroup(
             pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1003, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
+                .addContainerGap(1048, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
         pnlAreaJuegoLayout.setVerticalGroup(
             pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGroup(pnlAreaJuegoLayout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(795, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlAreaJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlAreaJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlAreaJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(pnlAreaJuego, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -116,10 +123,24 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
             this.setVisible(false);
         }
     }//GEN-LAST:event_formKeyTyped
+boolean encendido = true;
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ImageIcon p = new ImageIcon("/Imagenes/kasdk.png");
+        
+        if (encendido){
+           jButton1.setIcon(p);
+            System.out.println("Aparece");
+       }else{
+           jButton1.setDisabledIcon(p);
+           System.out.println("Desaparece");
+    }
+        encendido = !encendido;
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel pnlAreaJuego;
     // End of variables declaration//GEN-END:variables
 }
