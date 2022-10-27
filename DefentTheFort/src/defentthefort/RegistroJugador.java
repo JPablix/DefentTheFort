@@ -34,7 +34,7 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
 
     @Override
     public void paint(Graphics g){
-        Image fondo = new ImageIcon("BGRegistro.png").getImage();
+        Image fondo = new ImageIcon("src\\Imagenes\\BGRegistro.png").getImage();
         g.drawImage(fondo,0,0,getWidth(),getHeight(),pnlRegistro);
     }
 

@@ -5,6 +5,7 @@
 package defentthefort;
 
 import Arma.Arma;
+import Zombie.Zombie;
 
 /**
  *
@@ -15,5 +16,48 @@ public class Espacio {
     boolean hasArma;
     Zombie zombie;
     Arma arma;
+
+    public Espacio() {
+        this.hasZombie = false;
+        this.hasArma = false;
+        this.zombie = null;
+        this.arma = null;
+    }
+
+    
+    
+    public boolean isHasZombie() {
+        return hasZombie;
+    }
+
+    public void setHasZombie(boolean hasZombie) {
+        this.hasZombie = hasZombie;
+    }
+
+    public boolean isHasArma() {
+        return hasArma;
+    }
+
+    public void setHasArma(boolean hasArma) {
+        this.hasArma = hasArma;
+    }
+
+    public Zombie getZombie() {
+        return zombie;
+    }
+
+    public void setZombie(Zombie zombie) {
+        this.zombie = zombie;
+    }
+
+    public Arma getArma() {
+        return arma;
+    }
+
+    public void setArma(Arma arma) {
+        this.arma = arma;
+    }
+    
+    
     
 }

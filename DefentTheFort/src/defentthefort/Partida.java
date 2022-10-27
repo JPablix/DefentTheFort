@@ -5,6 +5,7 @@
 package defentthefort;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,7 +15,7 @@ public class Partida implements Serializable{
     private int nivel;
     private int espaciosZombies;
     private int espaciosSoldados;
-    
+    Espacio espacios[] = new Espacio[625];
     
 
     public Partida() {
