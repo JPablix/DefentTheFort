@@ -14,6 +14,8 @@ public class Partida implements Serializable{
     private int nivel;
     private int espaciosZombies;
     private int espaciosSoldados;
+    
+    
 
     public Partida() {
         this.nivel = 1;

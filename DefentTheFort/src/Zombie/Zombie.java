@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Zombies;
+package Zombie;
 
 import java.awt.Image;
 import javax.swing.Icon;
@@ -12,7 +12,7 @@ import javax.swing.JButton;
  *
  * @author 167069
  */
-public abstract class Zombies {
+public abstract class Zombie {
     private int vida;
     private int ataque;
     private int campos;
@@ -21,7 +21,7 @@ public abstract class Zombies {
     private Image imagen;
     
     
-    public Zombies(int vida, int ataque, int campos, String nombre, Image imagen, JButton posicion) {
+    public Zombie(int vida, int ataque, int campos, String nombre, Image imagen, JButton posicion) {
         this.vida = vida;
         this.ataque = ataque;
         this.campos = campos;

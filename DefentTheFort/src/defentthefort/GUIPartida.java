@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 
 
 public class GUIPartida extends javax.swing.JFrame implements Serializable{
-    int SIZE = 40;
+    int SIZE = 30;
     Partida partida;
     BDUsuarios usuarios;
     
@@ -26,31 +26,25 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         generarMatriz();
     }
     
-    private void generarMatriz(){
-       //Generar botones
+    private void generarMatriz(){   //Generar botones
        int posX = 0;
        int posY = 0;
-       int contador = 1;
        //------------------------------------------
        for(int i = 0; i < 625; i++){
            JButton btn = new JButton("");
-           if((contador%2) == 0){
+           if((i%2) == 0){
                btn.setBackground(new Color(0,153,0));
-               contador = 1;
-           }
-           else{
+           }else{
               btn.setBackground(new Color(0,102,0));
-              contador += 1; 
            }          
            btn.setSize(SIZE, SIZE);
-           //-------------------------------
+        //-------------------------------
            if(i%25 == 0 && i>0){
                posX = 0;
                posY += SIZE;
            }
-           //------------------------------
+        //------------------------------
            btn.setLocation((SIZE*posX++), posY);
-
            pnlAreaJuego.add(btn);
        }
     }
@@ -125,16 +119,17 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     }//GEN-LAST:event_formKeyTyped
 boolean encendido = true;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ImageIcon p = new ImageIcon("/Imagenes/kasdk.png");
+        ImageIcon p = new ImageIcon("src\\Imagenes\\Arbol.png");
         
         if (encendido){
            jButton1.setIcon(p);
             System.out.println("Aparece");
        }else{
-           jButton1.setDisabledIcon(p);
+           jButton1.setIcon(null);
            System.out.println("Desaparece");
     }
         encendido = !encendido;
+        validate();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     
