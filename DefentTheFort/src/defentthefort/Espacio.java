@@ -6,13 +6,14 @@ package defentthefort;
 
 import Arma.Arma;
 import Zombie.Zombie;
+import java.io.Serializable;
 import javax.swing.JButton;
 
 /**
  *
  * @author JPablo
  */
-public class Espacio {
+public class Espacio implements Serializable{
     boolean hasZombie;
     boolean hasArma;
     Zombie zombie;

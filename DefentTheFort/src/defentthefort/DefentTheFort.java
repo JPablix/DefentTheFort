@@ -6,13 +6,11 @@ package defentthefort;
 
 import java.io.Serializable;
 import javax.swing.JLabel;
-
 /**
  *
  * @author JPablix
  */
 public class DefentTheFort implements Serializable{
-
     /**
      * @param args the command line arguments
      */
@@ -20,5 +18,4 @@ public class DefentTheFort implements Serializable{
         RegistroJugador ventana = new RegistroJugador();
         ventana.setVisible(true);
     }
-    
 }

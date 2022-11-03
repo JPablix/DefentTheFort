@@ -4,44 +4,55 @@
  */
 package Arma;
 
+import defentthefort.Espacio;
 import java.awt.Image;
+import java.io.Serializable;
+import java.util.ArrayList;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
  *
  * @author JPablix
  */
-public abstract class Arma {
+public abstract class Arma implements Serializable{
     private int vida;
     private int ataque;
     private int campos;
+    private int rango;
     private String nombre;
-    private JButton txfPosicion;
-    private Image imagen;
+    private JButton btnPosicion;
+    private ImageIcon imagen;
+    private ArrayList<String> ataquesEjercidos;
+    private ArrayList<String> ataquesRecibidos;
+    private Espacio matriz[];
 
-    public Arma(int vida, int ataque, int campos, String nombre, Image imagen, JButton posicion) {
+    public Arma(int vida, int ataque, int campos, int rango, String nombre, ImageIcon imagen, JButton boton, Espacio matriz[]) {
         this.vida = vida;
         this.ataque = ataque;
         this.campos = campos;
+        this.rango = rango;
         this.nombre = nombre;
+        this.btnPosicion = boton;
         this.imagen = imagen;
-        this.txfPosicion = posicion;
-        //Falta Arrays
+        this.matriz = matriz;
     }
     
     public void morir(){
         setVida(0);
     }
+    
     public abstract void atacar();
     
+    public abstract boolean buscarObjetivo();
     
     public void aparecer(){ //Pone la imagen
-        this.txfPosicion.setIcon((Icon) imagen);
+        this.btnPosicion.setIcon((Icon) imagen);
     }
     
     public void desaparecer(){ //Quita la imagen
-        this.txfPosicion.setDisabledIcon((Icon) imagen);
+        this.btnPosicion.setDisabledIcon((Icon) imagen);
     }
     
     
@@ -57,10 +68,10 @@ public abstract class Arma {
     public void setCampos(int campos) {
         this.campos = campos;
     }
-    public Image getImagen() {
+    public ImageIcon getImagen() {
         return imagen;
     }
-    public void setImagen(Image imagen) {
+    public void setImagen(ImageIcon imagen) {
         this.imagen = imagen;
     }
     public int getAtaque() {
@@ -76,10 +87,10 @@ public abstract class Arma {
         this.nombre = nombre;
     }
     public JButton getTxfPosicion() {
-        return txfPosicion;
+        return btnPosicion;
     }
     public void setTxfPosicion(JButton txfPosicion) {
-        this.txfPosicion = txfPosicion;
+        this.btnPosicion = txfPosicion;
     }
     
     

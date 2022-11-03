@@ -28,7 +28,7 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
         initComponents();
         this.setResizable(false);
         registroUsuarios = new BDUsuarios();
-        //registroUsuarios.restaurar();
+        registroUsuarios.restaurar();
         
     }
 

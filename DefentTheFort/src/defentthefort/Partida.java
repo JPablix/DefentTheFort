@@ -35,6 +35,15 @@ public class Partida implements Serializable{
         return espacios;
     }
 
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+    
+
    
     
     
