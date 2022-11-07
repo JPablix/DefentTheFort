@@ -14,23 +14,26 @@ import javax.swing.JButton;
  * @author JPablo
  */
 public class Espacio implements Serializable{
+    int ID;
     boolean hasZombie;
     boolean hasArma;
+    JButton boton;
     Zombie zombie;
     Arma arma;
-    JButton boton;
+    
 
-    public Espacio() {
+    public Espacio(int ID) {
         this.hasZombie = false;
         this.hasArma = false;
+        this.ID = ID;
     }
 
     public void setBoton(JButton boton) {
         this.boton = boton;
     }
-    
-    
-
+    public JButton getBoton() {
+        return boton;
+    }
     
     
     public boolean isHasZombie() {
@@ -64,8 +67,23 @@ public class Espacio implements Serializable{
     public void setArma(Arma arma) {
         this.arma = arma;
     }
+
+    public int getID() {
+        return ID;
+    }
     
-    
+    public int getPosition(char coord){
+        int  X = ID%25;
+        int Y = ID/25;
+        
+        if (coord == 'x' || coord == 'X'){
+            return (int)X;
+        }
+        else if (coord == 'y' || coord == 'Y'){
+            return Y;
+        }else 
+            return -1;
+    }
     
     
 }

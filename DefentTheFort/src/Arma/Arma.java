@@ -22,37 +22,44 @@ public abstract class Arma implements Serializable{
     private int campos;
     private int rango;
     private String nombre;
-    private JButton btnPosicion;
+    private Espacio espacio;
     private ImageIcon imagen;
     private ArrayList<String> ataquesEjercidos;
     private ArrayList<String> ataquesRecibidos;
     private Espacio matriz[];
 
-    public Arma(int vida, int ataque, int campos, int rango, String nombre, ImageIcon imagen, JButton boton, Espacio matriz[]) {
+    public  Arma(int vida, int ataque, int campos, int rango, String nombre, ImageIcon imagen, Espacio espacio, Espacio matriz[]) {
         this.vida = vida;
         this.ataque = ataque;
         this.campos = campos;
         this.rango = rango;
         this.nombre = nombre;
-        this.btnPosicion = boton;
+        this.espacio = espacio;
         this.imagen = imagen;
         this.matriz = matriz;
+        this.ataquesEjercidos = new ArrayList<String>();
+        this.ataquesRecibidos = new ArrayList<String>();
+
+        
     }
     
     public void morir(){
         setVida(0);
     }
     
-    public abstract void atacar();
+    public abstract void atacar(Espacio espacio);
     
     public abstract boolean buscarObjetivo();
     
     public void aparecer(){ //Pone la imagen
-        this.btnPosicion.setIcon((Icon) imagen);
+        this.espacio.getBoton().setIcon(imagen);
+        this.espacio.setHasArma(true);
+        this.espacio.setArma(this);
     }
     
     public void desaparecer(){ //Quita la imagen
-        this.btnPosicion.setDisabledIcon((Icon) imagen);
+        this.espacio.getBoton().setIcon(null);
+        this.espacio.setHasArma(false);
     }
     
     
@@ -86,15 +93,30 @@ public abstract class Arma implements Serializable{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public JButton getTxfPosicion() {
-        return btnPosicion;
+    public Espacio getEspacio() {
+        return espacio;
     }
-    public void setTxfPosicion(JButton txfPosicion) {
-        this.btnPosicion = txfPosicion;
+    public void setEspacio(Espacio espacio) {
+        this.espacio = espacio;
     }
-    
-    
-    
-   
+    public void recibirDaño(int daño){
+        this.vida = this.vida - daño;
+    }
+
+    public ArrayList<String> getAtaquesEjercidos() {
+        return ataquesEjercidos;
+    }
+
+    public void setAtaquesEjercidos(ArrayList<String> ataquesEjercidos) {
+        this.ataquesEjercidos = ataquesEjercidos;
+    }
+
+    public ArrayList<String> getAtaquesRecibidos() {
+        return ataquesRecibidos;
+    }
+
+    public void setAtaquesRecibidos(ArrayList<String> ataquesRecibidos) {
+        this.ataquesRecibidos = ataquesRecibidos;
+    }
     
 }

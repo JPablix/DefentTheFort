@@ -28,7 +28,7 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
         initComponents();
         this.setResizable(false);
         registroUsuarios = new BDUsuarios();
-        registroUsuarios.restaurar();
+        //registroUsuarios.restaurar();
         
     }
 
@@ -109,7 +109,7 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
             }
             else {
                 System.out.println("Cargando Partida");
-                partida = new GUIPartida(user.getUsername(), user.getPartida()); //Se manda el nombre del usuario y la partida
+                partida = new GUIPartida(user.getUsername(), user.getPartida(), registroUsuarios); //Se manda el nombre del usuario y la partida
                 partida.setVisible(true);
             }
         }

@@ -5,23 +5,25 @@
 package Zombie;
 
 import java.awt.Image;
+import java.io.Serializable;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
  *
  * @author 167069
  */
-public abstract class Zombie {
+public abstract class Zombie implements Serializable{
     private int vida;
     private int ataque;
     private int campos;
     private String nombre;
     private JButton btnPosicion;
-    private Image imagen;
+    private ImageIcon imagen;
     
     
-    public Zombie(int vida, int ataque, int campos, String nombre, Image imagen, JButton posicion) {
+    public Zombie(int vida, int ataque, int campos, String nombre, ImageIcon imagen, JButton posicion) {
         this.vida = vida;
         this.ataque = ataque;
         this.campos = campos;
@@ -56,10 +58,10 @@ public abstract class Zombie {
     public void setCampos(int campos) {
         this.campos = campos;
     }
-    public Image getImagen() {
+    public ImageIcon getImagen() {
         return imagen;
     }
-    public void setImagen(Image imagen) {
+    public void setImagen(ImageIcon imagen) {
         this.imagen = imagen;
     }
     public int getAtaque() {
@@ -79,5 +81,9 @@ public abstract class Zombie {
     }
     public void setBtnPosicion(JButton txfPosicion) {
         this.btnPosicion = txfPosicion;
-    }   
+    } 
+    
+    public void recibirDaño(int daño){
+        this.vida = this.vida - daño;
+    }
 }

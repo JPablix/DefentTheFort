@@ -4,11 +4,18 @@
  */
 package defentthefort;
 
-
 import Arma.Arma;
+import Arma.ArmaAerea;
 import Arma.ArmaBloque;
+import Arma.ArmaContacto;
+import Arma.ArmaDistancia;
+import Arma.ArmaImpacto;
+import Arma.ArmaMultiple;
 import BaseDeDatos.BDUsuarios;
+import Zombie.Zombie;
+import Zombie.ZombiePrueba;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -20,98 +27,202 @@ import javax.swing.JOptionPane;
 public class GUIPartida extends javax.swing.JFrame implements Serializable{
     int SIZE = 30;
     Partida partida;
-    BDUsuarios usuarios;
+    BDUsuarios registroUsuarios;
     ImageIcon tempImageArma;
     
-    public GUIPartida(String jugador, Partida partida) {
+    public GUIPartida(String jugador, Partida partida, BDUsuarios registroUsuarios) {
         initComponents();
         this.partida = partida;
+        this.registroUsuarios = registroUsuarios;
+        
         this.setTitle("Defent The Fort: Zombie Attack \t"+jugador);
         lblNivel.setText("NIVEL: "+partida.getNivel());
         
-        generarMatriz();
-        partida.espacios[312].boton.setIcon(new ImageIcon("src\\Imagenes\\Arbol.png"));
+        if (partida.isHasPartida()){
+            //---------CARGAR LA PARTIDA DEL USUARIO
+            colocarEspacios();
+            System.out.println("PARTIDA CARGADA");
+        }else{
+           //----------Crear Partida Nueva
+           partida.setHasPartida(true);
+           System.out.println("PARTIDA CREADA");
+            generarMatriz();
+            partida.espacios[312].boton.setIcon(new ImageIcon("src\\Imagenes\\Arbol.png")); //Colocación del árbol de Salvación
+        }
+        
+        
+        
+
+//-------------------PRUEBA ZOMBIE---------------------BORRAR
+        ZombiePrueba zombie;
+        zombie = new ZombiePrueba(100, 10, 5, "Zombie", partida.espacios[420].getBoton(), new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
+
+        partida.espacios[420].boton.setIcon(new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
+        partida.espacios[420].setZombie(zombie);
+        partida.espacios[420].setHasZombie(true);
+        System.out.println("Zombie: ("+partida.espacios[420].getPosition('X')+","+partida.espacios[420].getPosition('Y')+")");
     }
     
-    private void generarMatriz(){   //Generar botones
-       int posX = 0;
-       int posY = 0;
-       //------------------------------------------
-       for(int i = 0; i < 625; i++){
-           JButton btn = new JButton("");
-           if((i%2) == 0){
-               btn.setBackground(new Color(0,153,0));
-           }else{
-              btn.setBackground(new Color(0,102,0));
-           }          
-           btn.setSize(SIZE, SIZE);
-        //-------------------------------
-           if(i%25 == 0 && i>0){
-               posX = 0;
-               posY += SIZE;
-           }
-        //------------------------------
-           btn.setLocation((SIZE*posX++), posY);
-           pnlAreaJuego.add(btn);
-           partida.espacios[i].setBoton(btn);
-           
-           btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonMatrizActionPerformed(evt,btn);
-            }
-           });
-       }
+private void colocarEspacios(){
+    for(int i = 0; i < 625; i++){
+        JButton btn = partida.espacios[i].getBoton();
+        pnlAreaJuego.add(btn);
+        btn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
+       });
     }
+}
+    
+private void generarMatriz(){   //Generar botones
+   int posX = 0;
+   int posY = 0;
+   //------------------------------------------
+   for(int i = 0; i < 625; i++){
+       JButton btn = new JButton("");
+       if((i%2) == 0){
+           btn.setBackground(new Color(0,153,0));
+       }else{
+          btn.setBackground(new Color(0,102,0));
+       }          
+       btn.setSize(SIZE, SIZE);
+    //-------------------------------
+       if(i%25 == 0 && i>0){
+           posX = 0;
+           posY += SIZE;
+       }
+    //------------------------------
+       btn.setLocation((SIZE*posX++), posY);
+       pnlAreaJuego.add(btn);
+       partida.espacios[i].setBoton(btn);
 
-    private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
-        
-        if (tempImageArma == null){                         //Restricción al poner arma por que no se presionó un botón
-            System.out.println("POR FALTA DE SELECCIÓN");
-            JOptionPane.showMessageDialog(null, "Primero debe seleccionar un arma a colocar");
-            return;
-        } 
-        if (btn.getIcon() != null){                         //Restricción al poner arma
-            System.out.println("POR IMAGEN SUPERPUESTA");   //Para quitar imagen debe esta seleccionado algo
-            JOptionPane.showMessageDialog(null, "Espacio ya ocupado por un arma");
-            System.out.println(btn.getIcon()+"");           //Y se deben recuperar lo puntos
-            return;
-        }      
-        
-        btn.setText("NG");                              //Se registras un boton diferente de todos
-        
-        for (int i = 0; i < 625; i++){                  //Se busca el boton seleccionado en el array
-            if (partida.espacios[i].boton.getText().equals("NG")){
-                Espacio espacio = partida.espacios[i];
-                //TO DO:
-                /*-Cambiar el estado del espacio X
-                  -Dependiendo del nombre de la imagen se crea distinto tipo de arma
-                  -Crear una nuevo arma enviandole la imagen
-                  -Antes se verifica si se tiene campos suficientes(DINERO)
-                */
-                espacio.boton.setText("");              //Se quita la bandera
-                btn.setIcon(tempImageArma);             //Se cambia la iamgen
-                espacio.setHasArma(true);               //Se cambia el estado del espacio a que si tiene arma
-                
-                //Cambiar imagen, pero en realidadse debe asignar al 
-                //-----------Comparacion de Tipo de Arma
-                //System.out.println("DESCRIPCIÓN: "+tempImageArma.getDescription());   //Ver la descripcion del icono tomado
-                if (tempImageArma.getDescription().contains("ArmaAerea")){       //crear ArmaAerea Normal
-                    System.out.println("Se creo arma Aerea");
-                }if (tempImageArma.getDescription().contains("ArmaMuro")){      //crear ArmaMuro Normal
-                    System.out.println("Se creo arma Bloque");
-                    ArmaBloque muro = new ArmaBloque(100, 10, 1, 0, "Muro", tempImageArma, btn, partida.getEspacios());
+       btn.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
+       });
+   }
+}
+
+private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
+    //-----------------------RESTRICCIONES AL PONER ARMAS
+    boolean mostrarMenu = false;
+    if (btn.getIcon() != null){                         //Restricción al poner arma
+        mostrarMenu = true;
+        //---------------Mostrar Elementos Atacados
+//        System.out.print("Objetivos Atacados:");
+//        partida.espacios[i].
+//        
+//        
+//        System.out.println("POR IMAGEN SUPERPUESTA");   //Para quitar imagen debe esta seleccionado algo
+//        JOptionPane.showMessageDialog(null, "Espacio ya ocupado por un arma");
+//        System.out.println(btn.getIcon()+"");           //Y se deben recuperar lo puntos
+        //return;
+    }      
+
+    btn.setText("NG");                              //Se registras un boton diferente de todos
+
+    //---------------------BUSCAR POSICION DE ARMA RESGISTRADA-------------------------
+    for (int i = 0; i < 625; i++){                  //Se busca el boton seleccionado en el array
+        if (partida.espacios[i].boton.getText().equals("NG")){
+            Espacio espacio = partida.espacios[i];  //Definimos el espacio
+            espacio.boton.setText("");              //Se quita la bandera
+            
+            //-----------MOSTRAR INFO----------------------
+            if (mostrarMenu){
+                if (espacio.hasArma){
+                    if (btn.getIcon() != null){
+                        String str = espacio.getArma().getNombre()+"\n";
+
+                        str += "Objetivos Atacados: ";
+                        
+                        for (String ataque : espacio.getArma().getAtaquesEjercidos()) {
+                            str += (" "+ataque);
+                            System.out.println(ataque+"");
+                        }
+                        str += "\n";
+                        
+                        str += "Ataques Recibidos:";
+                        
+                        for (String ataque : espacio.getArma().getAtaquesRecibidos()) {
+                            str += (" "+ataque);
+                        }
+                        str += "\n";
+                        
+                        
+                        txaInfo.setText(str);
+                    }
                     
-                }if (tempImageArma.getDescription().contains("ArmaContacto")){  //crear Armacontacto Normal
-                    System.out.println("Se creo arma Contacto");
-                }if (tempImageArma.getDescription().contains("ArmaAlcance")){   //crear ArmaAlcance Normal
-                    System.out.println("Se creo arma Alcance");
-                }if (tempImageArma.getDescription().contains("ArmaImpacto")){  //crear Armacontacto Normal
-                    System.out.println("Se creo arma Impacto");
-                }if (tempImageArma.getDescription().contains("ArmaMultiple")){  //crear Armacontacto Normal
-                    System.out.println("Se creo arma Multiple");
+                if (espacio.hasZombie){
+                   txaInfo.setText("Zombie");
+                }
+                break;
+                }
+                break;
+            }
+        if (tempImageArma == null){                         //Restricción al poner arma por que no se presionó un botón
+        System.out.println("POR FALTA DE SELECCIÓN");
+        JOptionPane.showMessageDialog(null, "Primero debe seleccionar un arma a colocar");
+        break;
+        }
+            /*
+            TO DO:
+             -Cambiar los numeros por variables constantes
+             -Aplicar las variables ataque de manera correcta
+             -Aplicar los threats correctos a las armas
+        
+             -Aplicar el mostrar ataques a los Zombies
+             -
+            */
+            //-----------COMPARACIÓN ARMA COLOCADA-----------------------------------
+            if (tempImageArma.getDescription().contains("ArmaAerea")){       //crear ArmaAerea Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaAerea Aere = new ArmaAerea(100, 20, 3, 5, "Dron", tempImageArma, espacio, partida.getEspacios());
+                }
+            }if (tempImageArma.getDescription().contains("ArmaMuro")){      //crear ArmaBloque Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaBloque Bloq = new ArmaBloque(100, 20, 3, 5, "Muro", tempImageArma, espacio, partida.getEspacios());
+                }
+            }if (tempImageArma.getDescription().contains("ArmaContacto")){  //crear Armacontacto Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaContacto Cont = new ArmaContacto(100, 20, 3, 5, "Bate", tempImageArma, espacio, partida.getEspacios());
+                }
+            }if (tempImageArma.getDescription().contains("ArmaAlcance")){   //crear ArmaAlcance Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaDistancia Alca = new ArmaDistancia(100, 20, 3, 5, "Torreta", tempImageArma, espacio, partida.getEspacios());
+                }
+            }if (tempImageArma.getDescription().contains("ArmaImpacto")){  //crear Armacontacto Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaImpacto Impa = new ArmaImpacto(100, 20, 3, 5, "Mina", tempImageArma, espacio, partida.getEspacios());
+                }
+            }if (tempImageArma.getDescription().contains("ArmaMultiple")){  //crear Armacontacto Normal
+                if (partida.getEspaciosArmas() < 3)
+                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                else{
+                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                    ArmaMultiple Mult = new ArmaMultiple(100, 20, 3, 5, "Metralleta", tempImageArma, espacio, partida.getEspacios());
                 }
             }
+            break;
         }
+    }
+}
+    
+    public void siguienteNivel(){
+        partida.setNivel(partida.getNivel()+1);
+        
     }
     
     /**
@@ -135,8 +246,9 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         btnArmaAerea = new javax.swing.JButton();
         btnArmaDistancia = new javax.swing.JButton();
         btnArmaMultiple = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        lblLastBtn = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txaInfo = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
@@ -274,37 +386,42 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("LastSet:");
+        btnSave.setBackground(new java.awt.Color(51, 102, 255));
+        btnSave.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("SAVE");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
-        lblLastBtn.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        lblLastBtn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblLastBtn.setText("###");
+        txaInfo.setColumns(20);
+        txaInfo.setRows(5);
+        jScrollPane1.setViewportView(txaInfo);
 
         javax.swing.GroupLayout pnlAreaJuegoLayout = new javax.swing.GroupLayout(pnlAreaJuego);
         pnlAreaJuego.setLayout(pnlAreaJuegoLayout);
         pnlAreaJuegoLayout.setHorizontalGroup(
             pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlAreaJuegoLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
                 .addContainerGap(789, Short.MAX_VALUE)
                 .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
-                        .addComponent(lblArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
-                        .addComponent(pnlArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlAreaJuegoLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(lblLastBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(32, 32, 32))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
+                            .addComponent(lblArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(lblNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(19, 19, 19))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
+                            .addComponent(pnlArmas, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(52, 52, 52)))))
         );
         pnlAreaJuegoLayout.setVerticalGroup(
             pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,13 +437,13 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
                     .addGroup(pnlAreaJuegoLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblLastBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(175, 175, 175)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(184, Short.MAX_VALUE))
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(305, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -364,7 +481,7 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        // TODO add your handling code here:
+        partida.setActivate(!partida.isActivate());
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnArmaContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArmaContactoActionPerformed
@@ -391,6 +508,10 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
         tempImageArma = (ImageIcon) btnArmaMultiple.getIcon();
     }//GEN-LAST:event_btnArmaMultipleActionPerformed
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        registroUsuarios.guardar();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -400,13 +521,14 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     private javax.swing.JButton btnArmaImpacto;
     private javax.swing.JButton btnArmaMultiple;
     private javax.swing.JButton btnArmaMuro;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnStart;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblArmas;
-    private javax.swing.JLabel lblLastBtn;
     private javax.swing.JLabel lblNivel;
     private javax.swing.JPanel pnlAreaJuego;
     private javax.swing.JPanel pnlArmas;
+    private javax.swing.JTextArea txaInfo;
     // End of variables declaration//GEN-END:variables
 }
