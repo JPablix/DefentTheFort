@@ -6,6 +6,7 @@ package Arma;
 
 import Zombie.Zombie;
 import defentthefort.Espacio;
+import defentthefort.Partida;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,60 +16,20 @@ import javax.swing.JButton;
  * @author JPablo
  */
 public class ArmaDistancia extends Arma{
-    private int vida;
-    private int ataque;
-    private int campos;
-    private int rango;
-    private String nombre;
-    private Espacio espacio;
-    private ImageIcon imagen;
-    private ArrayList<String> ataquesEjercidos;
-    private ArrayList<String> ataquesRecibidos;
-    private Espacio matriz[];
 
-    public ArmaDistancia(int vida, int ataque, int campos, int rango, String nombre, ImageIcon imagen, Espacio espacio, Espacio[] matriz) {
-        super(vida, ataque, campos, rango, nombre, imagen, espacio, matriz);
-        this.vida = vida;
-        this.ataque = ataque;
-        this.campos = campos;
-        this.rango = rango;
-        this.nombre = nombre;
-        this.espacio = espacio;
-        this.imagen = new ImageIcon("src\\Imagenes\\ArmaAlcance.png");
-        this.matriz = matriz;
-        this.ataquesEjercidos = new ArrayList<String>();
-        this.ataquesRecibidos = new ArrayList<String>();
-        
-        this.aparecer();
-        System.out.println();
-        System.out.println("("+this.espacio.getPosition('x')+","+ this.espacio.getPosition('y')+") " + nombre +" Buscando objetivo...");
-        this.buscarObjetivo();
+    public ArmaDistancia(int vida, int ataque, int campos, int rango, String nombre, ImageIcon imagen, Espacio espacio, Espacio[] matriz, Partida partida) {
+        super(vida, ataque, campos, rango, nombre, espacio, partida);
+
+        this.setImagen(new ImageIcon("src\\Imagenes\\ArmaAlcance.png"));
+        this.aparecer();        
     }
-    
-    
     
     @Override
     public void atacar(Espacio zombieEncontrado) {
         Zombie zombie = zombieEncontrado.getZombie();
-        zombie.recibirDaño(ataque);
-        System.out.println(zombie.getNombre()+" -"+ataque+" de vida.");
-        ataquesEjercidos.add(zombie.getNombre());
+        zombie.recibirDaño(this.getAtaque());
+        System.out.println(zombie.getNombre()+" -"+this.getAtaque()+" de vida.");
+        this.getAtaquesEjercidos().add(zombie.getNombre());
     }
 
-    @Override
-    public boolean buscarObjetivo() {
-        for (int i = 0; i < matriz.length; i++) {
-            if (Math.abs(matriz[i].getPosition('x') - espacio.getPosition('x')) <= rango && 
-                Math.abs(matriz[i].getPosition('y') - espacio.getPosition('y')) <= rango){
-                
-                if (matriz[i].isHasZombie()){   //Si el espacio encontrado tiene zombie se procede con el ataque 
-                    matriz[i].getZombie().getNombre(); //Añadir el atacado al Array
-                    atacar(matriz[i]);                 //Atacar
-                    return true;                       //Retornar Booleano
-                }
-            }
-        }
-        return false;                                  //Retornar Booleano
-    }
-    
 }

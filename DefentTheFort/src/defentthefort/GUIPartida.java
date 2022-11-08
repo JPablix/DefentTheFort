@@ -177,42 +177,42 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaAerea Aere = new ArmaAerea(100, 20, 3, 5, "Dron", tempImageArma, espacio, partida.getEspacios());
+                    ArmaAerea Aere = new ArmaAerea(100, 20, 3, 5, "Dron", tempImageArma, espacio, partida.getEspacios(), partida);
                 }
             }if (tempImageArma.getDescription().contains("ArmaMuro")){      //crear ArmaBloque Normal
                 if (partida.getEspaciosArmas() < 3)
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaBloque Bloq = new ArmaBloque(100, 20, 3, 5, "Muro", tempImageArma, espacio, partida.getEspacios());
+                    ArmaBloque Bloq = new ArmaBloque(100, 20, 3, 5, "Muro", tempImageArma, espacio, partida.getEspacios(), partida);
                 }
             }if (tempImageArma.getDescription().contains("ArmaContacto")){  //crear Armacontacto Normal
                 if (partida.getEspaciosArmas() < 3)
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaContacto Cont = new ArmaContacto(100, 20, 3, 5, "Bate", tempImageArma, espacio, partida.getEspacios());
+                    ArmaContacto Cont = new ArmaContacto(100, 20, 3, 5, "Bate", tempImageArma, espacio, partida.getEspacios(), partida);
                 }
             }if (tempImageArma.getDescription().contains("ArmaAlcance")){   //crear ArmaAlcance Normal
                 if (partida.getEspaciosArmas() < 3)
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaDistancia Alca = new ArmaDistancia(100, 20, 3, 5, "Torreta", tempImageArma, espacio, partida.getEspacios());
+                    ArmaDistancia Alca = new ArmaDistancia(100, 20, 3, 5, "Torreta", tempImageArma, espacio, partida.getEspacios(), partida);
                 }
             }if (tempImageArma.getDescription().contains("ArmaImpacto")){  //crear Armacontacto Normal
                 if (partida.getEspaciosArmas() < 3)
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaImpacto Impa = new ArmaImpacto(100, 20, 3, 5, "Mina", tempImageArma, espacio, partida.getEspacios());
+                    ArmaImpacto Impa = new ArmaImpacto(100, 20, 3, 5, "Mina", tempImageArma, espacio, partida.getEspacios(),partida);
                 }
             }if (tempImageArma.getDescription().contains("ArmaMultiple")){  //crear Armacontacto Normal
                 if (partida.getEspaciosArmas() < 3)
                     JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
                 else{
                     partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaMultiple Mult = new ArmaMultiple(100, 20, 3, 5, "Metralleta", tempImageArma, espacio, partida.getEspacios());
+                    ArmaMultiple Mult = new ArmaMultiple(100, 20, 3, 5, "Metralleta", tempImageArma, espacio, partida.getEspacios(), partida);
                 }
             }
             break;
@@ -482,6 +482,13 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         partida.setActivate(!partida.isActivate());
+        if (partida.isActivate()){
+            for (int i = 0; i < 624; i++){
+            if (partida.espacios[i].hasArma){
+               partida.espacios[i].getArma().start();
+            }
+        }
+        }
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnArmaContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArmaContactoActionPerformed

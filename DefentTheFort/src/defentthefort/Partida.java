@@ -26,6 +26,7 @@ public class Partida implements Serializable{
         this.espaciosZombies = 20;
         this.espaciosArmas = 20;
         multiplicador = 1;
+        this.Activate = false;
     }
     
     private void init(){
@@ -85,7 +86,7 @@ public class Partida implements Serializable{
     public void setHasPartida(boolean hasPartida) {
         this.hasPartida = hasPartida;
     }
-
+    
 
     
     
