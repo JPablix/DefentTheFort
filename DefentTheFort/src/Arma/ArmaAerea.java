@@ -23,11 +23,5 @@ public class ArmaAerea extends Arma{
         this.aparecer(); 
     }
     
-    @Override
-    public void atacar(Espacio zombieEncontrado) {
-        Zombie zombie = zombieEncontrado.getZombie();
-        zombie.recibirDaño(this.getAtaque());
-        System.out.println(zombie.getNombre()+" -"+this.getAtaque()+" de vida.");
-        this.getAtaquesEjercidos().add(zombie.getNombre());
-    }
+
 }

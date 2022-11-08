@@ -4,8 +4,11 @@
  */
 package Zombie;
 
+import defentthefort.Espacio;
+import defentthefort.Partida;
 import java.awt.Image;
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,32 +21,42 @@ public abstract class Zombie implements Serializable{
     private int vida;
     private int ataque;
     private int campos;
+    private int rango;
     private String nombre;
-    private JButton btnPosicion;
+    private Espacio espacio;
     private ImageIcon imagen;
-    
-    
-    public Zombie(int vida, int ataque, int campos, String nombre, ImageIcon imagen, JButton posicion) {
+    private ArrayList<String> ataquesEjercidos;
+    private ArrayList<String> ataquesRecibidos;
+    private Espacio matriz[];
+    private Partida partida;
+
+    public  Zombie(int vida, int ataque, int campos, int rango, String nombre, Espacio espacio, Partida partida) {
         this.vida = vida;
         this.ataque = ataque;
         this.campos = campos;
+        this.rango = rango;
         this.nombre = nombre;
-        this.imagen = imagen;
-        this.btnPosicion = posicion;
-        //Falta Arrays
+        this.espacio = espacio;
+        this.matriz = partida.getEspacios();
+        this.ataquesEjercidos = new ArrayList<String>();
+        this.ataquesRecibidos = new ArrayList<String>();
+        this.partida = partida;
     }
-    public void morir(){
-        setVida(0);
-    }
+    
     public abstract void atacar();
     
     public void aparecer(){ //Pone la imagen
-        this.btnPosicion.setIcon((Icon) imagen);
+        this.espacio.getBoton().setIcon(imagen);
+        this.espacio.setHasZombie(true);
+        this.espacio.setZombie(this);
+        System.out.println("("+this.espacio.getPosition('x')+","+ this.espacio.getPosition('y')+") " + nombre +" Zombie Buscando objetivo...");
     }
     
     public void desaparecer(){ //Quita la imagen
-        this.btnPosicion.setDisabledIcon((Icon) imagen);
-    }
+        this.espacio.getBoton().setIcon(null);
+        this.espacio.setHasZombie(false);
+        this.espacio.setZombie(null);
+    } 
     
     
     public int getVida() {
@@ -76,12 +89,55 @@ public abstract class Zombie implements Serializable{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public JButton getBtnPosicion() {
-        return btnPosicion;
+
+    public int getRango() {
+        return rango;
     }
-    public void setBtnPosicion(JButton txfPosicion) {
-        this.btnPosicion = txfPosicion;
-    } 
+
+    public void setRango(int rango) {
+        this.rango = rango;
+    }
+
+    public Espacio getEspacio() {
+        return espacio;
+    }
+
+    public void setEspacio(Espacio espacio) {
+        this.espacio = espacio;
+    }
+
+    public ArrayList<String> getAtaquesEjercidos() {
+        return ataquesEjercidos;
+    }
+
+    public void setAtaquesEjercidos(ArrayList<String> ataquesEjercidos) {
+        this.ataquesEjercidos = ataquesEjercidos;
+    }
+
+    public ArrayList<String> getAtaquesRecibidos() {
+        return ataquesRecibidos;
+    }
+
+    public void setAtaquesRecibidos(ArrayList<String> ataquesRecibidos) {
+        this.ataquesRecibidos = ataquesRecibidos;
+    }
+
+    public Espacio[] getMatriz() {
+        return matriz;
+    }
+
+    public void setMatriz(Espacio[] matriz) {
+        this.matriz = matriz;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public void setPartida(Partida partida) {
+        this.partida = partida;
+    }
+
     
     public void recibirDaño(int daño){
         this.vida = this.vida - daño;

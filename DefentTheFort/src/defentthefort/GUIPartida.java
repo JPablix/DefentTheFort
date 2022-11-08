@@ -55,11 +55,8 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
 
 //-------------------PRUEBA ZOMBIE---------------------BORRAR
         ZombiePrueba zombie;
-        zombie = new ZombiePrueba(100, 10, 5, "Zombie", partida.espacios[420].getBoton(), new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
-
+        zombie = new ZombiePrueba(100, 10, 2, 1, "ZOMBIE", partida.espacios[420], partida);
         partida.espacios[420].boton.setIcon(new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
-        partida.espacios[420].setZombie(zombie);
-        partida.espacios[420].setHasZombie(true);
         System.out.println("Zombie: ("+partida.espacios[420].getPosition('X')+","+partida.espacios[420].getPosition('Y')+")");
     }
     
@@ -467,27 +464,17 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
     }//GEN-LAST:event_formKeyTyped
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            //ImageIcon p = new ImageIcon("src\\Imagenes\\Arbol.png");
-        
-//        if (encendido){
-//           jButton1.setIcon(p);
-//            System.out.println("Aparece");
-//       }else{
-//           jButton1.setIcon(null);
-//           System.out.println("Desaparece");
-//    }
-//        encendido = !encendido;
-//        validate();
+    partida.subirNivel();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         partida.setActivate(!partida.isActivate());
         if (partida.isActivate()){
             for (int i = 0; i < 624; i++){
-            if (partida.espacios[i].hasArma){
-               partida.espacios[i].getArma().start();
+                if (partida.espacios[i].hasArma){
+                   partida.espacios[i].getArma().start();
+                }
             }
-        }
         }
     }//GEN-LAST:event_btnStartActionPerformed
 

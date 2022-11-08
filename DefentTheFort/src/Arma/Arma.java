@@ -51,7 +51,7 @@ public abstract class Arma extends Thread implements Serializable  {
             try {
                 sleep(1000);
                 if (buscarObjetivo()){
-                    System.out.println(this.getNombre()+" atacando");
+                    System.out.println(this.getNombre()+" ataco");
                 }
             } catch (Exception e) {}
         }
@@ -73,11 +73,12 @@ public abstract class Arma extends Thread implements Serializable  {
     
     public  void atacar(Espacio zombieEncontrado){
         Zombie zombie = zombieEncontrado.getZombie();
-        zombie.setVida(zombie.getVida()-this.ataque);
-//        zombie.getAtaquesRecibidos().add(this.getNombre());
+        zombie.setVida(zombie.getVida()-this.getAtaque());
+        zombie.getAtaquesRecibidos().add(this.getNombre());
         this.getAtaquesEjercidos().add(zombie.getNombre());
-        if (zombie.getVida() <= 0)
+        if (zombie.getVida() <= 0){
             zombie.desaparecer();
+        }
     }
         
     public void aparecer(){ //Pone la imagen
@@ -94,9 +95,7 @@ public abstract class Arma extends Thread implements Serializable  {
         this.espacio.setArma(null);
     } 
     
-    public void morir(){
-        setVida(0);
-    }
+
     
     //-------------GETTERS Y SETTERS
     public int getVida() {

@@ -22,12 +22,5 @@ public class ArmaImpacto extends Arma{
         this.setImagen(new ImageIcon("src\\Imagenes\\ArmaImpacto.png"));
         this.aparecer(); 
     }
-    
-    @Override
-    public void atacar(Espacio zombieEncontrado) {
-        Zombie zombie = zombieEncontrado.getZombie();
-        zombie.recibirDaño(this.getAtaque());
-        System.out.println(zombie.getNombre()+" -"+this.getAtaque()+" de vida.");
-        this.getAtaquesEjercidos().add(zombie.getNombre());
-    }
+
 }

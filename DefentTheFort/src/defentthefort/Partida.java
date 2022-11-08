@@ -6,6 +6,7 @@ package defentthefort;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -15,9 +16,9 @@ public class Partida implements Serializable{
     private int nivel;
     private int espaciosZombies;
     private int espaciosArmas;
-    private int multiplicador;
     private boolean Activate;
     private boolean hasPartida;
+    private float dificultad;                 //Variable que define los valores 
     Espacio espacios[] = new Espacio[625];
 
     public Partida() {
@@ -25,8 +26,18 @@ public class Partida implements Serializable{
         this.nivel = 1;
         this.espaciosZombies = 20;
         this.espaciosArmas = 20;
-        multiplicador = 1;
         this.Activate = false;
+        this.dificultad = 1;
+    }
+    
+    public void subirNivel(){
+        nivel++;
+        espaciosArmas += 5;
+        espaciosZombies += 5;
+        
+        float aumentoDif = ((new Random()).nextFloat((float) 0.21)); //Random de 0-20
+        dificultad += aumentoDif;
+        System.out.println("La dificultad ahora es: "+ dificultad);
     }
     
     private void init(){
@@ -71,12 +82,12 @@ public class Partida implements Serializable{
         this.Activate = Activate;
     }
 
-    public int getMultiplicador() {
-        return multiplicador;
+    public float getDificultad() {
+        return dificultad;
     }
 
-    public void setMultiplicador(int multiplicador) {
-        this.multiplicador = multiplicador;
+    public void setDificultad(float dificultad) {
+        this.dificultad = dificultad;
     }
 
     public boolean isHasPartida() {
