@@ -74,10 +74,10 @@ public abstract class Arma extends Thread implements Serializable  {
     public  void atacar(Espacio zombieEncontrado){
         Zombie zombie = zombieEncontrado.getZombie();
         zombie.setVida(zombie.getVida()-this.getAtaque());
-        zombie.getAtaquesRecibidos().add(this.getNombre());
+        //zombie.getAtaquesRecibidos().add(this.getNombre());
         this.getAtaquesEjercidos().add(zombie.getNombre());
         if (zombie.getVida() <= 0){
-            zombie.desaparecer();
+            //zombie.desaparecer();
         }
     }
         
@@ -94,8 +94,6 @@ public abstract class Arma extends Thread implements Serializable  {
         this.espacio.setHasArma(false);
         this.espacio.setArma(null);
     } 
-    
-
     
     //-------------GETTERS Y SETTERS
     public int getVida() {

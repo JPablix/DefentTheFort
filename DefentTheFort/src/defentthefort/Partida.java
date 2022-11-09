@@ -7,6 +7,7 @@ package defentthefort;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,13 +32,26 @@ public class Partida implements Serializable{
     }
     
     public void subirNivel(){
-        nivel++;
+        nivel++;                //Se sube de nivel y se entregan los puntos a Armas 
         espaciosArmas += 5;
         espaciosZombies += 5;
         
         float aumentoDif = ((new Random()).nextFloat((float) 0.21)); //Random de 0-20
         dificultad += aumentoDif;
         System.out.println("La dificultad ahora es: "+ dificultad);
+    }
+    
+    public void seguirJugando(){
+        int option = JOptionPane.showConfirmDialog(null, "¿Desea pasar al nivel?", "El árbol ah sido destruido.", JOptionPane.YES_NO_OPTION);
+        if (option == 0){
+            System.out.println("Sigue");
+        }
+        else 
+            System.out.println("No sigue");
+    }
+    
+    public void limpiarNivel(){
+        
     }
     
     private void init(){

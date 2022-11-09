@@ -13,12 +13,18 @@ import Arma.ArmaImpacto;
 import Arma.ArmaMultiple;
 import BaseDeDatos.BDUsuarios;
 import Zombie.Zombie;
-import Zombie.ZombiePrueba;
+import Zombie.ZombieChoque;
+import Zombie.ZombieContacto;
+import Zombie.ZombieDistancia;
+import Zombie.ZombieVolador;
+//import Zombie.ZombiePrueba;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -48,16 +54,14 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
            System.out.println("PARTIDA CREADA");
             generarMatriz();
             partida.espacios[312].boton.setIcon(new ImageIcon("src\\Imagenes\\Arbol.png")); //Colocación del árbol de Salvación
-        }
-        
-        
+        }        
         
 
 //-------------------PRUEBA ZOMBIE---------------------BORRAR
-        ZombiePrueba zombie;
-        zombie = new ZombiePrueba(100, 10, 2, 1, "ZOMBIE", partida.espacios[420], partida);
-        partida.espacios[420].boton.setIcon(new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
-        System.out.println("Zombie: ("+partida.espacios[420].getPosition('X')+","+partida.espacios[420].getPosition('Y')+")");
+        //ZombiePrueba zombie;
+        //zombie = new ZombiePrueba(100, 10, 2, 1, "ZOMBIE", partida.espacios[420], partida);
+//        partida.espacios[420].boton.setIcon(new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
+//        System.out.println("Zombie: ("+partida.espacios[420].getPosition('X')+","+partida.espacios[420].getPosition('Y')+")");
     }
     
 private void colocarEspacios(){
@@ -216,10 +220,42 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
         }
     }
 }
+
+    private void generarZombies(){
+        int contCampos = 0;
+        while(contCampos < partida.getEspaciosZombies()){
+            int aleatorio = (new Random()).nextInt(5);
+            switch (aleatorio) {
+                case 1:
+                    ZombieContacto zombieContacto = new ZombieContacto(100, 20, 2, 1,"Infectado", "ZombieContacto.png", partida);
+                    contCampos += zombieContacto.getCampos();
+                    zombieContacto.start();
+                    break;
+                case 2:
+                    ZombieChoque zombieChoque = new ZombieChoque(60, 150, 5, 1,"Explosivo", "ZombieChoque.png", partida);
+                    contCampos += zombieChoque.getCampos();
+                    zombieChoque.start();
+                    break;
+                case 3:
+                    ZombieDistancia zombieDistancia = new ZombieDistancia(100, 20, 4, 3,"Soldado", "ZombieDistancia.png", partida);
+                    contCampos += zombieDistancia.getCampos();
+                    zombieDistancia.start();
+                    break;
+                default:
+                    ZombieVolador zombieVolador = new ZombieVolador(80, 15, 3, 1,"Niño", "ZombieVolador.png", partida);
+                    contCampos += zombieVolador.getCampos();
+                    zombieVolador.start();
+                    break;
+            }
+        }
+        
+        
+    }
     
     public void siguienteNivel(){
-        partida.setNivel(partida.getNivel()+1);
-        
+        partida.subirNivel();
+        lblNivel.setText("NIVEL: "+partida.getNivel());
+   
     }
     
     /**
@@ -469,12 +505,15 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         partida.setActivate(!partida.isActivate());
+        generarZombies();
+        System.out.println("Se activo");
         if (partida.isActivate()){
             for (int i = 0; i < 624; i++){
                 if (partida.espacios[i].hasArma){
                    partida.espacios[i].getArma().start();
                 }
             }
+            
         }
     }//GEN-LAST:event_btnStartActionPerformed
 

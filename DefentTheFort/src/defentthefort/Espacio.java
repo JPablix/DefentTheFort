@@ -34,8 +34,7 @@ public class Espacio implements Serializable{
     public JButton getBoton() {
         return boton;
     }
-    
-    
+
     public boolean isHasZombie() {
         return hasZombie;
     }
