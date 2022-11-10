@@ -6,6 +6,7 @@ package Arma;
 
 import Zombie.Zombie;
 import defentthefort.Espacio;
+import defentthefort.GUIPartida;
 import defentthefort.Partida;
 import java.awt.Image;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,6 +59,7 @@ public abstract class Arma extends Thread implements Serializable  {
         }
     }
     
+
     public boolean buscarObjetivo() {
         for (int i = 0; i < matriz.length; i++) {
             if (Math.abs(matriz[i].getPosition('x') - espacio.getPosition('x')) <= rango && 
@@ -77,8 +80,29 @@ public abstract class Arma extends Thread implements Serializable  {
         //zombie.getAtaquesRecibidos().add(this.getNombre());
         this.getAtaquesEjercidos().add(zombie.getNombre());
         if (zombie.getVida() <= 0){
-            //zombie.desaparecer();
+            System.out.println(zombie.getNombre()+ " MUERE");
+            zombie.morir();
+            partida.setZombiesActivos(partida.getZombiesActivos()-1);   //SE RESTA UNO DE LOS ZOMBIES EXISTENTES
+            if (verificarGane())
+                JOptionPane.showMessageDialog(null, "Nvel Superado");
+                partida.subirNivel();
         }
+    }
+    
+    public boolean verificarGane(){
+        for (int i = 0; i < matriz.length; i++) {
+            Espacio espacio1 = matriz[i];
+            if (partida.getZombiesActivos() <= 0){
+                System.out.println("Se eliminaron todos los zombies--------------------------------");
+                return true;
+            }
+            if (!espacio1.isHasZombie()){
+                System.out.println("Zombie encontrado, partida no termina. ->"+espacio1.getZombie().getNombre());
+                return false;
+            }
+            
+        }
+        return true;
     }
         
     public void aparecer(){ //Pone la imagen
@@ -147,9 +171,5 @@ public abstract class Arma extends Thread implements Serializable  {
     public void setAtaquesRecibidos(ArrayList<String> ataquesRecibidos) {
         this.ataquesRecibidos = ataquesRecibidos;
     }
-    
-    
-    
-    
     
 }

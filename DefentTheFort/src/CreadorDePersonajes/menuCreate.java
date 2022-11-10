@@ -4,6 +4,9 @@
  */
 package CreadorDePersonajes;
 
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author JPablo
@@ -11,6 +14,7 @@ package CreadorDePersonajes;
 public class menuCreate {
     
     public static void main(String[] args){
-        System.out.println("Hola");
+        GUICrearPersonaje ventana = new GUICrearPersonaje();
+        ventana.setVisible(true);
     }
 }

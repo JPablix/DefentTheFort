@@ -23,13 +23,11 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
     BDUsuarios registroUsuarios;
     GUIPartida partida;
     
-    
     public RegistroJugador() {
         initComponents();
         this.setResizable(false);
         registroUsuarios = new BDUsuarios();
-        //registroUsuarios.restaurar();
-        
+        //registroUsuarios.restaurar();        
     }
 
     @Override
@@ -37,7 +35,6 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
         Image fondo = new ImageIcon("src\\Imagenes\\BGRegistro.png").getImage();
         g.drawImage(fondo,0,0,getWidth(),getHeight(),pnlRegistro);
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -76,9 +73,9 @@ public class RegistroJugador extends javax.swing.JFrame implements Serializable{
             .addGroup(pnlRegistroLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblIngreseUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(102, 102, 102)
                 .addComponent(txfUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(151, 151, 151))
+                .addGap(61, 61, 61))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

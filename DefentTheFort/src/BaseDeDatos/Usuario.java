@@ -7,6 +7,7 @@ package BaseDeDatos;
 import defentthefort.GUIPartida;
 import defentthefort.Partida;
 import java.io.Serializable;
+import javax.swing.JLabel;
 
 /**
  *

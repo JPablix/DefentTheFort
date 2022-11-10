@@ -23,14 +23,17 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-
 public class GUIPartida extends javax.swing.JFrame implements Serializable{
+    
     int SIZE = 30;
     Partida partida;
     BDUsuarios registroUsuarios;
@@ -39,6 +42,8 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
     public GUIPartida(String jugador, Partida partida, BDUsuarios registroUsuarios) {
         initComponents();
         this.partida = partida;
+        lblNivel.setText("Nivel: "+partida.getNivel());
+        this.partida.lblInfoAccess(lblNivel);
         this.registroUsuarios = registroUsuarios;
         
         this.setTitle("Defent The Fort: Zombie Attack \t"+jugador);
@@ -55,171 +60,150 @@ public class GUIPartida extends javax.swing.JFrame implements Serializable{
             generarMatriz();
             partida.espacios[312].boton.setIcon(new ImageIcon("src\\Imagenes\\Arbol.png")); //Colocación del árbol de Salvación
         }        
-        
+    }
+    
+    private void colocarEspacios(){
+        for(int i = 0; i < 625; i++){
+            JButton btn = partida.espacios[i].getBoton();
+            pnlAreaJuego.add(btn);
+            btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
+           });
+        }
+    }
+    
+    private void generarMatriz(){   //Generar botones
+       int posX = 0;
+       int posY = 0;
+       //------------------------------------------
+       for(int i = 0; i < 625; i++){
+           JButton btn = new JButton("");
+           if((i%2) == 0){
+               btn.setBackground(new Color(0,153,0));
+           }else{
+              btn.setBackground(new Color(0,102,0));
+           }          
+           btn.setSize(SIZE, SIZE);
+        //-------------------------------
+           if(i%25 == 0 && i>0){
+               posX = 0;
+               posY += SIZE;
+           }
+        //------------------------------
+           btn.setLocation((SIZE*posX++), posY);
+           pnlAreaJuego.add(btn);
+           partida.espacios[i].setBoton(btn);
 
-//-------------------PRUEBA ZOMBIE---------------------BORRAR
-        //ZombiePrueba zombie;
-        //zombie = new ZombiePrueba(100, 10, 2, 1, "ZOMBIE", partida.espacios[420], partida);
-//        partida.espacios[420].boton.setIcon(new ImageIcon("src\\Imagenes\\ZombieContacto.png"));
-//        System.out.println("Zombie: ("+partida.espacios[420].getPosition('X')+","+partida.espacios[420].getPosition('Y')+")");
-    }
-    
-private void colocarEspacios(){
-    for(int i = 0; i < 625; i++){
-        JButton btn = partida.espacios[i].getBoton();
-        pnlAreaJuego.add(btn);
-        btn.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
-       });
-    }
-}
-    
-private void generarMatriz(){   //Generar botones
-   int posX = 0;
-   int posY = 0;
-   //------------------------------------------
-   for(int i = 0; i < 625; i++){
-       JButton btn = new JButton("");
-       if((i%2) == 0){
-           btn.setBackground(new Color(0,153,0));
-       }else{
-          btn.setBackground(new Color(0,102,0));
-       }          
-       btn.setSize(SIZE, SIZE);
-    //-------------------------------
-       if(i%25 == 0 && i>0){
-           posX = 0;
-           posY += SIZE;
+           btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
+           });
        }
-    //------------------------------
-       btn.setLocation((SIZE*posX++), posY);
-       pnlAreaJuego.add(btn);
-       partida.espacios[i].setBoton(btn);
+    }
 
-       btn.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {jButtonMatrizActionPerformed(evt,btn);}
-       });
-   }
-}
 
-private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
-    //-----------------------RESTRICCIONES AL PONER ARMAS
-    boolean mostrarMenu = false;
-    if (btn.getIcon() != null){                         //Restricción al poner arma
-        mostrarMenu = true;
-        //---------------Mostrar Elementos Atacados
-//        System.out.print("Objetivos Atacados:");
-//        partida.espacios[i].
-//        
-//        
-//        System.out.println("POR IMAGEN SUPERPUESTA");   //Para quitar imagen debe esta seleccionado algo
-//        JOptionPane.showMessageDialog(null, "Espacio ya ocupado por un arma");
-//        System.out.println(btn.getIcon()+"");           //Y se deben recuperar lo puntos
-        //return;
-    }      
+    private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
+        //-----------------------RESTRICCIONES AL PONER ARMAS
+        boolean mostrarMenu = false;
+        if (btn.getIcon() != null){                         //Restricción al poner arma
+            mostrarMenu = true;
 
-    btn.setText("NG");                              //Se registras un boton diferente de todos
+        }      
 
-    //---------------------BUSCAR POSICION DE ARMA RESGISTRADA-------------------------
-    for (int i = 0; i < 625; i++){                  //Se busca el boton seleccionado en el array
-        if (partida.espacios[i].boton.getText().equals("NG")){
-            Espacio espacio = partida.espacios[i];  //Definimos el espacio
-            espacio.boton.setText("");              //Se quita la bandera
-            
-            //-----------MOSTRAR INFO----------------------
-            if (mostrarMenu){
-                if (espacio.hasArma){
-                    if (btn.getIcon() != null){
-                        String str = espacio.getArma().getNombre()+"\n";
+        btn.setText("NG");                              //Se registras un boton diferente de todos
 
-                        str += "Objetivos Atacados: ";
-                        
-                        for (String ataque : espacio.getArma().getAtaquesEjercidos()) {
-                            str += (" "+ataque);
-                            System.out.println(ataque+"");
+        //---------------------BUSCAR POSICION DE ARMA RESGISTRADA-------------------------
+        for (int i = 0; i < 625; i++){                  //Se busca el boton seleccionado en el array
+            if (partida.espacios[i].boton.getText().equals("NG")){
+                Espacio espacio = partida.espacios[i];  //Definimos el espacio
+                espacio.boton.setText("");              //Se quita la bandera
+
+                //-----------MOSTRAR INFO----------------------
+                if (mostrarMenu){
+                    if (espacio.hasArma){
+                        if (btn.getIcon() != null){
+                            String str = espacio.getArma().getNombre()+"\n";
+
+                            str += "Objetivos Atacados: ";
+
+                            for (String ataque : espacio.getArma().getAtaquesEjercidos()) {
+                                str += (" "+ataque);
+                                System.out.println(ataque+"");
+                            }
+                            str += "\n";
+
+                            str += "Ataques Recibidos:";
+
+                            for (String ataque : espacio.getArma().getAtaquesRecibidos()) {
+                                str += (" "+ataque);
+                            }
+                            str += "\n";
+
+
+                            txaInfo.setText(str);
                         }
-                        str += "\n";
-                        
-                        str += "Ataques Recibidos:";
-                        
-                        for (String ataque : espacio.getArma().getAtaquesRecibidos()) {
-                            str += (" "+ataque);
-                        }
-                        str += "\n";
-                        
-                        
-                        txaInfo.setText(str);
+
+                    if (espacio.hasZombie){
+                       txaInfo.setText("Zombie");
                     }
-                    
-                if (espacio.hasZombie){
-                   txaInfo.setText("Zombie");
+                    break;
+                    }
+                    break;
                 }
-                break;
-                }
-                break;
-            }
-        if (tempImageArma == null){                         //Restricción al poner arma por que no se presionó un botón
-        System.out.println("POR FALTA DE SELECCIÓN");
-        JOptionPane.showMessageDialog(null, "Primero debe seleccionar un arma a colocar");
-        break;
-        }
-            /*
-            TO DO:
-             -Cambiar los numeros por variables constantes
-             -Aplicar las variables ataque de manera correcta
-             -Aplicar los threats correctos a las armas
-        
-             -Aplicar el mostrar ataques a los Zombies
-             -
-            */
-            //-----------COMPARACIÓN ARMA COLOCADA-----------------------------------
-            if (tempImageArma.getDescription().contains("ArmaAerea")){       //crear ArmaAerea Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaAerea Aere = new ArmaAerea(100, 20, 3, 5, "Dron", tempImageArma, espacio, partida.getEspacios(), partida);
-                }
-            }if (tempImageArma.getDescription().contains("ArmaMuro")){      //crear ArmaBloque Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaBloque Bloq = new ArmaBloque(100, 20, 3, 5, "Muro", tempImageArma, espacio, partida.getEspacios(), partida);
-                }
-            }if (tempImageArma.getDescription().contains("ArmaContacto")){  //crear Armacontacto Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaContacto Cont = new ArmaContacto(100, 20, 3, 5, "Bate", tempImageArma, espacio, partida.getEspacios(), partida);
-                }
-            }if (tempImageArma.getDescription().contains("ArmaAlcance")){   //crear ArmaAlcance Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaDistancia Alca = new ArmaDistancia(100, 20, 3, 5, "Torreta", tempImageArma, espacio, partida.getEspacios(), partida);
-                }
-            }if (tempImageArma.getDescription().contains("ArmaImpacto")){  //crear Armacontacto Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaImpacto Impa = new ArmaImpacto(100, 20, 3, 5, "Mina", tempImageArma, espacio, partida.getEspacios(),partida);
-                }
-            }if (tempImageArma.getDescription().contains("ArmaMultiple")){  //crear Armacontacto Normal
-                if (partida.getEspaciosArmas() < 3)
-                    JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
-                else{
-                    partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
-                    ArmaMultiple Mult = new ArmaMultiple(100, 20, 3, 5, "Metralleta", tempImageArma, espacio, partida.getEspacios(), partida);
-                }
-            }
+            if (tempImageArma == null){                         //Restricción al poner arma por que no se presionó un botón
+            System.out.println("POR FALTA DE SELECCIÓN");
+            JOptionPane.showMessageDialog(null, "Primero debe seleccionar un arma a colocar");
             break;
+            }
+
+                //-----------COMPARACIÓN ARMA COLOCADA-----------------------------------
+                if (tempImageArma.getDescription().contains("ArmaAerea")){       //crear ArmaAerea Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaAerea Aere = new ArmaAerea(80, 15, 3, 1, "Dron", tempImageArma, espacio, partida.getEspacios(), partida);
+                    }
+                }if (tempImageArma.getDescription().contains("ArmaMuro")){      //crear ArmaBloque Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaBloque Bloq = new ArmaBloque(300, 0, 2, 0, "Muro", tempImageArma, espacio, partida.getEspacios(), partida);
+                    }
+                }if (tempImageArma.getDescription().contains("ArmaContacto")){  //crear Armacontacto Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaContacto Cont = new ArmaContacto(100, 20, 2, 1, "Bate", tempImageArma, espacio, partida.getEspacios(), partida);
+                    }
+                }if (tempImageArma.getDescription().contains("ArmaAlcance")){   //crear ArmaAlcance Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaDistancia Alca = new ArmaDistancia(100, 20, 4, 4, "Torreta", tempImageArma, espacio, partida.getEspacios(), partida);
+                    }
+                }if (tempImageArma.getDescription().contains("ArmaImpacto")){  //crear Armacontacto Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaImpacto Impa = new ArmaImpacto(60, 150, 5, 1, "Mina", tempImageArma, espacio, partida.getEspacios(),partida);
+                    }
+                }if (tempImageArma.getDescription().contains("ArmaMultiple")){  //crear Armacontacto Normal
+                    if (partida.getEspaciosArmas() < 3)
+                        JOptionPane.showMessageDialog(null, "No se tiene suficientes espacios. Disponibles: "+partida.getEspaciosArmas());
+                    else{
+                        partida.setEspaciosArmas(partida.getEspaciosArmas()-3);          //Restamos el coste por Torreta
+                        ArmaMultiple Mult = new ArmaMultiple(100, 10, 5, 3, "Metralleta", tempImageArma, espacio, partida.getEspacios(), partida);
+                    }
+                }
+                break;
+            }
         }
     }
-}
+
 
     private void generarZombies(){
         int contCampos = 0;
@@ -227,29 +211,27 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
             int aleatorio = (new Random()).nextInt(5);
             switch (aleatorio) {
                 case 1:
-                    ZombieContacto zombieContacto = new ZombieContacto(100, 20, 2, 1,"Infectado", "ZombieContacto.png", partida);
+                    ZombieContacto zombieContacto = new ZombieContacto(5, 20, 2, 1,"Infectado", "ZombieContacto.png", partida);
                     contCampos += zombieContacto.getCampos();
                     zombieContacto.start();
                     break;
                 case 2:
-                    ZombieChoque zombieChoque = new ZombieChoque(60, 150, 5, 1,"Explosivo", "ZombieChoque.png", partida);
+                    ZombieChoque zombieChoque = new ZombieChoque(5, 150, 5, 1,"Explosivo", "ZombieChoque.png", partida);
                     contCampos += zombieChoque.getCampos();
                     zombieChoque.start();
                     break;
                 case 3:
-                    ZombieDistancia zombieDistancia = new ZombieDistancia(100, 20, 4, 3,"Soldado", "ZombieDistancia.png", partida);
+                    ZombieDistancia zombieDistancia = new ZombieDistancia(5, 20, 4, 3,"Soldado", "ZombieDistancia.png", partida);
                     contCampos += zombieDistancia.getCampos();
                     zombieDistancia.start();
                     break;
                 default:
-                    ZombieVolador zombieVolador = new ZombieVolador(80, 15, 3, 1,"Niño", "ZombieVolador.png", partida);
+                    ZombieVolador zombieVolador = new ZombieVolador(5, 15, 3, 1,"Helices", "ZombieVolador.png", partida);
                     contCampos += zombieVolador.getCampos();
                     zombieVolador.start();
                     break;
             }
         }
-        
-        
     }
     
     public void siguienteNivel(){
@@ -258,11 +240,7 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
    
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+
     //@SuppressWarnings("unchecked");
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -285,7 +263,7 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
-        setPreferredSize(new java.awt.Dimension(1110, 750));
+        setPreferredSize(new java.awt.Dimension(1389, 1080));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 formKeyTyped(evt);
@@ -438,7 +416,7 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
         pnlAreaJuegoLayout.setHorizontalGroup(
             pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAreaJuegoLayout.createSequentialGroup()
-                .addContainerGap(789, Short.MAX_VALUE)
+                .addContainerGap(1061, Short.MAX_VALUE)
                 .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlAreaJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,15 +483,15 @@ private void jButtonMatrizActionPerformed(ActionEvent evt, JButton btn) {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         partida.setActivate(!partida.isActivate());
-        generarZombies();
-        System.out.println("Se activo");
+        
+        System.out.println("\nINICIA EL JUEGO\n");
         if (partida.isActivate()){
+            generarZombies();
             for (int i = 0; i < 624; i++){
                 if (partida.espacios[i].hasArma){
                    partida.espacios[i].getArma().start();
                 }
             }
-            
         }
     }//GEN-LAST:event_btnStartActionPerformed
 
